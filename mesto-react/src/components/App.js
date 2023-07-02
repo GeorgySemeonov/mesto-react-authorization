@@ -24,10 +24,10 @@ const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false
 const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 const [selectedCard, setSelectedCard] = React.useState(false);
 
-function handleCardClick (props) {
-    setSelectedCard({link: props.link});
+function handleCardClick (items) {
+    setSelectedCard({link: items});
     
-    console.log(props.link);
+    // console.log(item.link);
     
     }
 

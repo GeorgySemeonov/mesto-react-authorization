@@ -7,7 +7,7 @@ import trashIcon from '../images/trash-icon.svg';
 export const Card = (props) => {
 
     function handleClick() {
-        props.onCardClick(props.link);
+        props.onCardClick(props.card);
      
       } 
 

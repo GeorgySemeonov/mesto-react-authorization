@@ -33,6 +33,8 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
             link: item.link ,
             name: item.name ,
             likeCount: item.likes.length ,
+            items: item.link
+
           }));
           setCards(cardsFromApi);
           
@@ -71,7 +73,7 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
       </div>
 
       <div  className="elements__list" >
-      {cards.map(({key, link , name , likeCount } ) => (
+      {cards.map(({key, link , name , likeCount , items} ) => (
       
     <Card 
     key={key} 
@@ -79,6 +81,7 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
     name={name} 
     likeCount={likeCount} 
     onCardClick={onCardClick}
+    card={items}
     />
     ))}
                
