@@ -15,7 +15,7 @@ return(
 
     <div id="cardTamplate" className="elements__tamplate" >
                <li className="element">
-                    <img onClick={handleClick} className="element__image" src={props.link} alt="#"/>
+                    <img onClick={handleClick} className="element__image" src={props.link} alt={props.name}/>
                     <h2 className="element__title">{ props.name }</h2>
                     <div className="element__like-field">
                     <button type="button" className="element__like-button"><img src={likeIcon} className="element__like-icon" alt="Лайк"/></button>
