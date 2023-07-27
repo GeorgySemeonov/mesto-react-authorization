@@ -28,15 +28,15 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
           setUserName(profInfo.name);
           setUserDescription(profInfo.about);
 
-          const cardsFromApi = cardsData.map(item =>({
-            key: item._id ,
-            link: item.link ,
-            name: item.name ,
-            likeCount: item.likes.length ,
-            items: item.link
+          // const cardsFromApi = cardsData.map(item =>({
+          //   key: item._id ,
+          //   link: item.link ,
+          //   name: item.name ,
+          //   likeCount: item.likes.length ,
+          //   items: item.link
 
-          }));
-          setCards(cardsFromApi);
+          // }));
+          setCards(cardsData);
           
         })
         .catch((error) => {
@@ -73,15 +73,15 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
       </div>
 
       <div  className="elements__list" >
-      {cards.map(({key, link , name , likeCount , items} ) => (
+      {cards.map((item) => (
       
     <Card 
-    key={key} 
-    link={link} 
-    name={name} 
-    likeCount={likeCount} 
+    key={item._id} 
+    link={item.link} 
+    name={item.name} 
+    likeCount={item.likeCount} 
     onCardClick={onCardClick}
-    card={items}
+    card={item}
     />
     ))}
                
