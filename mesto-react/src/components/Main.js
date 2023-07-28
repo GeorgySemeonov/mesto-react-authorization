@@ -4,8 +4,8 @@ import api from '../utils/Api';
 import editProfileIcon from '../images/edit-profile-icon.svg';
 import createProfileIcon from '../images/create-profile-icon.svg';
 
-import likeIcon from '../images/like-icon.svg';
-import trashIcon from '../images/trash-icon.svg';
+// import likeIcon from '../images/like-icon.svg';
+// import trashIcon from '../images/trash-icon.svg';
 
 import Card from './Card';
 
@@ -77,9 +77,9 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
       
     <Card 
     key={item._id} 
-    link={item.link} 
-    name={item.name} 
-    likeCount={item.likeCount} 
+    // link={item.link} 
+    // name={item.name} 
+    // likeCount={item.likeCount} 
     onCardClick={onCardClick}
     card={item}
     />
