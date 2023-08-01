@@ -14,7 +14,7 @@ import { ImagePopup } from "./ImagePopup";
 
 import api from "../utils/Api";
 
-import "./index.css";
+import "../index.css";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
