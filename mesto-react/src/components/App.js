@@ -25,6 +25,7 @@ function App() {
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(false);
+  const [imagePopupOpen, setImagePopupOpen] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
@@ -67,7 +68,11 @@ function App() {
   }
 
   function handleCardClick(item) {
-    setSelectedCard({ link: item.link });
+    setImagePopupOpen(true);
+    setSelectedCard({
+      link: item.link,
+      name: item.name,
+    });
   }
 
   function handleUpdateUser(userItem) {
@@ -120,7 +125,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
-    setSelectedCard(false);
+    setImagePopupOpen(false);
   }
 
   return (
@@ -159,7 +164,11 @@ function App() {
           onAddPlaceSubmit={handleAddPlaceSubmit}
         />
 
-        <ImagePopup onClose={closeAllPopups} card={selectedCard} />
+        <ImagePopup
+          isOpen={imagePopupOpen}
+          onClose={closeAllPopups}
+          card={selectedCard}
+        />
 
         <template id="cardTamplate" className="element__tamplate">
           <li className="element">

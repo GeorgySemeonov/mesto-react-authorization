@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 import CurrentUserContext from "../contexts/CurrentUserContext";
 
-function EditProilePopup({ isOpen, onClose, onUpdateUser }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   const currentUser = useContext(CurrentUserContext);
 
   useEffect(() => {
@@ -10,15 +10,16 @@ function EditProilePopup({ isOpen, onClose, onUpdateUser }) {
     setUserDescription(currentUser.about);
   }, [isOpen]);
 
+  const [name, setUserName] = useState("");
+  const [description, setUserDescription] = useState("");
+
   function handleName(e) {
     setUserName(e.target.value);
   }
-  const [name, setUserName] = useState("");
 
   function handleDescription(e) {
     setUserDescription(e.target.value);
   }
-  const [description, setUserDescription] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -47,6 +48,7 @@ function EditProilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="40"
         onChange={handleName}
+        value={name}
       />
 
       <span className="popup__input-error popup__input-error_type_name"></span>
@@ -60,6 +62,7 @@ function EditProilePopup({ isOpen, onClose, onUpdateUser }) {
         placeholder="Должность"
         minLength="2"
         maxLength="200"
+        value={description}
         onChange={handleDescription}
       />
 
@@ -68,4 +71,4 @@ function EditProilePopup({ isOpen, onClose, onUpdateUser }) {
   );
 }
 
-export default EditProilePopup;
+export default EditProfilePopup;

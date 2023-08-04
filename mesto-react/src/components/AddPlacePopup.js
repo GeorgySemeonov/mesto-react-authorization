@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function PopupAddCard({ isOpen, onClose, onAddPlaceSubmit }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlaceSubmit }) {
   const cardTitle = useRef();
   const cardImage = useRef();
 
@@ -57,4 +57,4 @@ function PopupAddCard({ isOpen, onClose, onAddPlaceSubmit }) {
   );
 }
 
-export default PopupAddCard;
+export default AddPlacePopup;

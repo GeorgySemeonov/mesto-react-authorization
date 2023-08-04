@@ -15,12 +15,7 @@ function Main(props) {
     <>
       <div className="profile">
         <div className="profile__avatar">
-          <img
-            src="#"
-            style={{ backgroundImage: `url(${profInfo.avatar})` }}
-            className="profile__photo"
-            alt="Аватар"
-          />
+          <img src={profInfo.avatar} className="profile__photo" alt="Аватар" />
           <button
             type="button"
             onClick={props.onEditAvatar}
