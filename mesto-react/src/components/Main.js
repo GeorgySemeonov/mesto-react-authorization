@@ -1,69 +1,53 @@
-import React from "react";
-import api from '../utils/Api';
+import React, { useContext } from "react";
+import api from "../utils/Api";
 
-import editProfileIcon from '../images/edit-profile-icon.svg';
-import createProfileIcon from '../images/create-profile-icon.svg';
+import CurrentUserContext from "../contexts/CurrentUserContext";
 
-// import likeIcon from '../images/like-icon.svg';
-// import trashIcon from '../images/trash-icon.svg';
+import editProfileIcon from "../images/edit-profile-icon.svg";
+import createProfileIcon from "../images/create-profile-icon.svg";
 
-import Card from './Card';
+import Card from "./Card";
 
-function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
-
-    // const [rating, setRating] = React.useState(0);
-
-    const [ userAvatar , setUserAvatar] = React.useState({});
-    const [userName, setUserName] = React.useState({});
-    const [userDescription, setUserDescription] = React.useState({});
-
-    const [cards, setCards] = React.useState([]);
-
-    React.useEffect(() => {
-        Promise.all([api.getDataProfile(), api.getInitialCards()])
-        .then(([profInfo, cardsData]) => {
-          // console.log(profInfo);
-          // console.log(cardsData);
-          setUserAvatar(profInfo.avatar);
-          setUserName(profInfo.name);
-          setUserDescription(profInfo.about);
-
-          // const cardsFromApi = cardsData.map(item =>({
-          //   key: item._id ,
-          //   link: item.link ,
-          //   name: item.name ,
-          //   likeCount: item.likes.length ,
-          //   items: item.link
-
-          // }));
-          setCards(cardsData);
-          
-        })
-        .catch((error) => {
-          console.log(`Ошибка: ${error}`);
-        })
-        },[]);
+function Main(props) {
+  const profInfo = useContext(CurrentUserContext);
 
   return (
     <>
       <div className="profile">
         <div className="profile__avatar">
-          <img src="#" style={{ backgroundImage: `url(${userAvatar})` }}   className="profile__photo" alt="Аватар" />
-          <button type="button" onClick={onEditAvatar} className="profile__avatar-edit"></button>
+          <img
+            src="#"
+            style={{ backgroundImage: `url(${profInfo.avatar})` }}
+            className="profile__photo"
+            alt="Аватар"
+          />
+          <button
+            type="button"
+            onClick={props.onEditAvatar}
+            className="profile__avatar-edit"
+          ></button>
         </div>
 
         <div className="profile__info">
-          <h1 className="profile__title">{`${userName}`}</h1>
-          <button type="button" onClick={onEditProfile} className="profile__edit">
+          <h1 className="profile__title">{`${profInfo.name}`}</h1>
+          <button
+            type="button"
+            onClick={props.onEditProfile}
+            className="profile__edit"
+          >
             <img
               src={editProfileIcon}
               className="profile__edit-icon"
               alt="Редактировать"
             />
           </button>
-          <p className="profile__subtitle"> {`${userDescription}`}</p>
+          <p className="profile__subtitle"> {`${profInfo.about}`}</p>
         </div>
-        <button type="button" onClick={onAddPlace} className="profile__add-button">
+        <button
+          type="button"
+          onClick={props.onAddPlace}
+          className="profile__add-button"
+        >
           <img
             src={createProfileIcon}
             className="profile__add-button-icon"
@@ -72,24 +56,21 @@ function Main({ onEditProfile, onEditAvatar, onAddPlace, onCardClick }) {
         </button>
       </div>
 
-      <div  className="elements__list" >
-      {cards.map((item) => (
-      
-    <Card 
-    key={item._id} 
-    // link={item.link} 
-    // name={item.name} 
-    // likeCount={item.likeCount} 
-    onCardClick={onCardClick}
-    card={item}
-    />
-    ))}
-               
-               </div>
+      <div className="elements__list">
+        {props.cards.map((item) => (
+          <Card
+            key={item._id}
+            card={item}
+            onCardClick={props.onCardClick}
+            onCardLike={props.onCardLike}
+            onCardDelete={props.onCardDelete}
+          />
+        ))}
+      </div>
 
       <div className="elements"></div>
     </>
   );
-};
+}
 
 export default Main;

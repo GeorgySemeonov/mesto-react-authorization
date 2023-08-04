@@ -1,8 +1,5 @@
 import React from "react";
 
-// { useState }
-
-// import closeIcon from '../images/close-Icon.svg';
 import likeIcon from "../images/like-icon.svg";
 import trashIcon from "../images/trash-icon.svg";
 
@@ -12,6 +9,11 @@ import { Footer } from "./Footer";
 import PopupWithForm from "./PopupWithForm";
 import { ImagePopup } from "./ImagePopup";
 
+import EditProfilePopup from "./EditProfilePopup.js";
+import EditAvatarPopup from "./EditAvatarPopup.js";
+import AddPlacePopup from "./AddPlacePopup.js";
+
+import CurrentUserContext from "../contexts/CurrentUserContext";
 import api from "../utils/Api";
 
 import "../index.css";
@@ -22,12 +24,84 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState({});
+  const [selectedCard, setSelectedCard] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    Promise.all([api.getDataProfile(), api.getInitialCards()])
+      .then(([userItem, initialCards]) => {
+        setCurrentUser(userItem);
+        setCards(initialCards);
+      })
+      .catch((err) => {
+        console.log(`Ошибка, ${err}`);
+      });
+  }, []);
+
+  function handleCardDelete(card) {
+    api
+      .deliteCard(card._id)
+      .then(() => {
+        setCards((cards) => cards.filter((item) => item._id !== card._id));
+      })
+      .catch((err) => {
+        console.log(`Ошибка удаления карточки, ${err}`);
+      });
+    //  console.log(card._id)
+  }
+
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(`Ошибка лайка, ${err}`);
+      });
+  }
 
   function handleCardClick(item) {
     setSelectedCard({ link: item.link });
+  }
 
-    // console.log(item.link);
+  function handleUpdateUser(userItem) {
+    api
+      .setUserInfo(userItem)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(`Ошибка редактирования профиля, ${err}`);
+      });
+  }
+
+  function handleUpdateAvatar(userItem) {
+    api
+      .setUserAvatar(userItem)
+      .then((userItem) => {
+        setCurrentUser(userItem);
+        closeAllPopups();
+      })
+      .catch((error) =>
+        console.error(`Ошибка редактирования аватара, ${error}`)
+      );
+  }
+
+  function handleAddPlaceSubmit(userItem) {
+    api
+      .addNewCard(userItem)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((error) => console.error(`Ошибка добавления карточки, ${error}`));
   }
 
   function handleEditAvatarClick() {
@@ -50,127 +124,64 @@ function App() {
   }
 
   return (
-    <div className="page">
-      <Header />
-      <Main
-        onEditAvatar={handleEditAvatarClick}
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onCardClick={handleCardClick}
-      />
-      <Footer />
-
-      {/* попап редактирования аватара */}
-      <PopupWithForm
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-        id="avatarPopup"
-        title="Обновить аватар"
-      >
-        <input
-          id="avatar-input"
-          type="url"
-          className="popup__form "
-          name="avatar"
-          required
-          placeholder="Введите ссылку на аватар"
-          minLength="2"
-          maxLength="200"
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <Header />
+        <Main
+          onEditAvatar={handleEditAvatarClick}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
         />
-        <span className="popup__input-error popup__input-error_type_avatar"></span>
-      </PopupWithForm>
+        <Footer />
 
-      {/* попап редактирования информации профиля */}
-      <PopupWithForm
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-        id="profilePopup"
-        title="Редактировать профиль"
-        name="popupForms"
-      >
-        <input
-          required
-          id="userNameForm"
-          className="popup__form"
-          type="text"
-          name="name"
-          placeholder="Имя"
-          minLength="2"
-          maxLength="40"
+        {/* попап редактирования аватара */}
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          onUpdateAvatar={handleUpdateAvatar}
         />
 
-        <span className="popup__input-error popup__input-error_type_name"></span>
-
-        <input
-          required
-          id="userOccupationForm"
-          className="popup__form"
-          type="text"
-          name="about"
-          placeholder="Должность"
-          minLength="2"
-          maxLength="200"
+        {/* попап редактирования информации профиля */}
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          onUpdateUser={handleUpdateUser}
         />
 
-        <span className="popup__input-error popup__input-error_type_about"></span>
-      </PopupWithForm>
-
-      {/* попап редактирования добавления карточки */}
-      <PopupWithForm
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-        id="cardPopup"
-        title="Новое место"
-        name="popupFormsCard"
-        buttonText="Создать"
-      >
-        <input
-          required
-          id="nameCard"
-          className="popup__form "
-          type="text"
-          name="name"
-          placeholder="Название"
-          minLength="2"
-          maxLength="30"
+        {/* попап редактирования добавления карточки */}
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          onAddPlaceSubmit={handleAddPlaceSubmit}
         />
 
-        <span className="popup__input-error popup__input-error_type_name"></span>
+        <ImagePopup onClose={closeAllPopups} card={selectedCard} />
 
-        <input
-          required
-          id="imageLink"
-          className="popup__form"
-          type="url"
-          name="link"
-          placeholder="Ссылка на картинку"
-        />
-
-        <span className="popup__input-error popup__input-error_type_link"></span>
-      </PopupWithForm>
-
-      <ImagePopup onClose={closeAllPopups} card={selectedCard} />
-
-      <template id="cardTamplate" className="element__tamplate">
-        <li className="element">
-          <img className="element__image" src="#" alt="#" />
-          <h2 className="element__title"></h2>
-          <div className="element__like-field">
-            <button type="button" className="element__like-button">
-              <img src={likeIcon} className="element__like-icon" alt="Лайк" />
+        <template id="cardTamplate" className="element__tamplate">
+          <li className="element">
+            <img className="element__image" src="#" alt="#" />
+            <h2 className="element__title"></h2>
+            <div className="element__like-field">
+              <button type="button" className="element__like-button">
+                <img src={likeIcon} className="element__like-icon" alt="Лайк" />
+              </button>
+              <div className="element__like-count"></div>
+            </div>
+            <button type="button" className="element__delite-button">
+              <img
+                src={trashIcon}
+                className="element__delite-icon"
+                alt="Удалить"
+              />
             </button>
-            <div className="element__like-count"></div>
-          </div>
-          <button type="button" className="element__delite-button">
-            <img
-              src={trashIcon}
-              className="element__delite-icon"
-              alt="Удалить"
-            />
-          </button>
-        </li>
-      </template>
-    </div>
+          </li>
+        </template>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
