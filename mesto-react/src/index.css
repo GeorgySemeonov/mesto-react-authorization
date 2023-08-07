@@ -38,6 +38,8 @@ body {
 
 
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__member-area/header__member-area.css);
+@import url(./blocks/header/__menu-item/header__menu-item.css);
 
 @import url(./blocks/profile/__photo/profile__photo.css);
 @import url(./blocks/profile/__avatar/profile__avatar.css);
@@ -49,6 +51,17 @@ body {
 @import url(./blocks/profile/__edit/profile__edit.css);
 @import url(./blocks/profile/__edit-icon/profile__edit-icon.css);
 
+@import url(./blocks/auth/auth.css);
+@import url(./blocks/auth/__button/auth__button.css);
+@import url(./blocks/auth/__form/auth__form.css);
+@import url(./blocks/auth/__info/auth__info.css);
+@import url(./blocks/auth/__input/auth__input.css);
+@import url(./blocks/auth/__label/auth__label.css);
+@import url(./blocks/auth/__link/auth__link.css);
+@import url(./blocks/auth/__register/auth__register.css);
+@import url(./blocks/auth/__status-icon/auth__status-icon.css);
+@import url(./blocks/auth/__status-text/auth__status-text.css);
+@import url(./blocks/auth/__title-form/auth__title-form.css);
 
 @import url(./blocks/profile/__add-button-icon/profile__add-button-icon.css);
 
