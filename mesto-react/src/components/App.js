@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useNavigate, BrowserRouter } from "react-router-dom";
+import { Route, Routes, useNavigate, Navigate} from "react-router-dom";
 
 import likeIcon from "../images/like-icon.svg";
 import trashIcon from "../images/trash-icon.svg";
@@ -68,7 +68,7 @@ function App() {
           console.log(`Ошибка верификации токена, ${err}`);
         });
     }
-  }, [isLoggedIn]);
+  }, [ isLoggedIn]);
 
   function handleCardDelete(card) {
     api
@@ -156,6 +156,7 @@ function App() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setImagePopupOpen(false);
+    setTooltipOpen(false)
   }
 
   // регистрация пользователя
@@ -181,7 +182,8 @@ function App() {
           localStorage.setItem("jwt", res.token);
           setEmail(email);
           setIsLoggedIn(true);
-          navigate("/", { replace: true });
+          
+          navigate("/");
         }
       })
       .catch((err) => {
@@ -205,8 +207,8 @@ function App() {
           <Route
             path="/"
             element={
-              <ProtectedRoute loggedIn={isLoggedIn}>
-                <Main
+              <ProtectedRoute isLoggedIn={isLoggedIn}
+                  component={<Main
                   onEditAvatar={handleEditAvatarClick}
                   onEditProfile={handleEditProfileClick}
                   onAddPlace={handleAddPlaceClick}
@@ -214,7 +216,8 @@ function App() {
                   onCardLike={handleCardLike}
                   onCardDelete={handleCardDelete}
                   cards={cards}
-                />{" "}
+                  />}>
+               
               </ProtectedRoute>
             }
           />
@@ -242,6 +245,7 @@ function App() {
               ></Register>
             }
           />
+          
         </Routes>
 
         <Footer />
