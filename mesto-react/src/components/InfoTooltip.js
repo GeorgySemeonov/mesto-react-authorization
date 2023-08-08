@@ -13,7 +13,7 @@ function InfoTooltip(props) {
       props.onClose();
 
       if (location.pathname === "/sign-up") {
-        navigate("/");
+        navigate("/sign-in");
       }
     }
     props.onClose();
@@ -24,7 +24,7 @@ function InfoTooltip(props) {
       id={props.id}
       className={`popup ${props.isOpen ? "popup_opened" : ""}`}
     >
-      <div className="popup__container">
+      <div className="popup__auth-containet">
         <button type="button" className="popup__close" onClick={redirectPopup}>
           <img className="popup__close-icon" src={closeIcon} alt="Закрыть" />
         </button>
